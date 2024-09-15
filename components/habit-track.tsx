@@ -163,94 +163,105 @@ export function HabitTrack() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      {/* Updated form to add new habits */}
-      <div className="mb-4">
-        <Label htmlFor="new-habit">Add New Habit</Label>
-        <div className="flex gap-2">
+    <div className="w-full">
+      {/* Form to add new habits */}
+      <div className="mb-6">
+        <Label htmlFor="new-habit" className="mb-2 block text-lg font-semibold">
+          Add New Habit
+        </Label>
+        <div className="flex flex-col gap-2 sm:flex-row">
           <Input
             id="new-habit"
             value={newHabit}
             onChange={(e) => setNewHabit(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Enter new habit"
+            className="flex-grow"
           />
-          <Button onClick={addHabit}>
+          <Button onClick={addHabit} className="w-full sm:w-auto">
             <PlusCircle className="mr-2 h-4 w-4" />
             Add
           </Button>
         </div>
       </div>
+
       {/* Month navigation */}
-      <div className="mb-4 flex items-center justify-between">
-        <Button onClick={prevMonth} variant="outline">
-          <ChevronLeft className="h-4 w-4" />
+      <div className="mb-6 flex items-center justify-between">
+        <Button onClick={prevMonth} variant="outline" className="p-2 sm:p-4">
+          <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
         </Button>
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-lg font-semibold sm:text-xl">
           {currentDate.toLocaleString('default', {
             month: 'long',
             year: 'numeric',
           })}
         </h2>
-        <Button onClick={nextMonth} variant="outline">
-          <ChevronRight className="h-4 w-4" />
+        <Button onClick={nextMonth} variant="outline" className="p-2 sm:p-4">
+          <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
         </Button>
       </div>
+
       {/* Calendar grid */}
-      <div className="mb-4">
-        {/* Weekday headers */}
-        <div className="mb-2 grid grid-cols-7 gap-1">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-            <div key={day} className="text-center font-semibold">
-              {day}
-            </div>
-          ))}
-        </div>
-        {/* Calendar days */}
-        <div className="grid grid-cols-7 gap-1">
-          {/* Empty cells for days before the 1st of the month */}
-          {Array.from({ length: firstDayOfMonth }).map((_, index) => (
-            <div key={`empty-${index}`} className="aspect-square" />
-          ))}
-          {/* Actual calendar days */}
-          {daysInMonth.map((date) => (
-            <div
-              key={date.toString()}
-              className={`relative aspect-square overflow-hidden rounded-lg border p-1 ${
-                isToday(date) ? 'bg-primary' : ''
-              }`}
-            >
-              <div className="absolute right-0 top-0 rounded-bl bg-red-500 px-1 text-xs font-black text-white">
-                {date.getDate()}
+      <div className="-mx-4 mb-6 overflow-x-auto sm:mx-0">
+        <div className="min-w-full sm:min-w-[640px]">
+          {/* Weekday headers */}
+          <div className="mb-2 grid grid-cols-7 gap-1 px-4 sm:px-0">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+              <div key={day} className="text-center text-xs font-semibold sm:text-sm">
+                {day}
               </div>
-              <div className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 max-h-[calc(100%-1rem)] overflow-y-auto">
-                {habits.map((habit) => {
-                  const dateString = date.toISOString().split('T')[0];
-                  const isChecked = habit.days[dateString];
-                  const isRecentlyChecked = recentlyChecked[`${habit.id}-${dateString}`];
-                  return (
-                    <button
-                      key={habit.id}
-                      onClick={() => toggleDay(habit.id, dateString)}
-                      className={cn(
-                        'mb-1 w-full rounded p-1 text-left text-xs',
-                        isChecked ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'
-                      )}
-                    >
-                      <span
-                        className={cn('inline-block transition-transform', isRecentlyChecked && 'animate-check-pop-in')}
+            ))}
+          </div>
+          {/* Calendar days */}
+          <div className="grid grid-cols-7 gap-1 px-4 sm:px-0">
+            {/* Empty cells for days before the 1st of the month */}
+            {Array.from({ length: firstDayOfMonth }).map((_, index) => (
+              <div key={`empty-${index}`} className="aspect-square" />
+            ))}
+            {/* Actual calendar days */}
+            {daysInMonth.map((date) => (
+              <div
+                key={date.toString()}
+                className={`relative aspect-square overflow-hidden rounded-lg border p-1 ${
+                  isToday(date) ? 'bg-primary' : ''
+                }`}
+              >
+                <div className="absolute right-0 top-0 rounded-bl bg-red-500 px-1 text-xs font-black text-white">
+                  {date.getDate()}
+                </div>
+                <div className="max-h-[calc(100%-1rem)] overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+                  {habits.map((habit) => {
+                    const dateString = date.toISOString().split('T')[0];
+                    const isChecked = habit.days[dateString];
+                    const isRecentlyChecked = recentlyChecked[`${habit.id}-${dateString}`];
+                    return (
+                      <button
+                        key={habit.id}
+                        onClick={() => toggleDay(habit.id, dateString)}
+                        className={cn(
+                          'mb-1 w-full rounded p-1 text-left text-xs',
+                          isChecked ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'
+                        )}
                       >
-                        {isChecked ? '✅ ' : ''}
-                      </span>
-                      {habit.name}
-                    </button>
-                  );
-                })}
+                        <span
+                          className={cn(
+                            'inline-block transition-transform',
+                            isRecentlyChecked && 'animate-check-pop-in'
+                          )}
+                        >
+                          {isChecked ? '✅ ' : ''}
+                        </span>
+                        {habit.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+
       {/* List of habits */}
       <div className="space-y-4">
         {habits.map((habit) => (
@@ -262,6 +273,7 @@ export function HabitTrack() {
           </div>
         ))}
       </div>
+
       {/* Confirmation Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
