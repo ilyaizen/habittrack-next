@@ -165,7 +165,7 @@ export function HabitTrack() {
   return (
     <div className="w-full">
       {/* Form to add new habits */}
-      <div className="mb-6">
+      <div className="mb-6 mt-6">
         <Label htmlFor="new-habit" className="mb-2 block text-lg font-semibold">
           Add New Habit
         </Label>
