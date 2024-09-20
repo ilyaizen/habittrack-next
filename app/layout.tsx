@@ -6,7 +6,15 @@ import { Providers } from '@/components/Providers';
 
 export const metadata: Metadata = {
   title: 'HabitTrack',
-  description: ' A habit tracker with monthly progress visualization.',
+  description: 'A habit tracker with monthly progress visualization',
+  keywords: ['habit tracker', 'monthly progress', 'visualization'],
+  openGraph: {
+    title: 'HabitTrack',
+    description: 'A habit tracker with monthly progress visualization',
+    images: ['/og-image.png'],
+    type: 'website',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
